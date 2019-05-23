@@ -1,0 +1,10 @@
+:host {
+    position: relative;
+    display: block;
+}
+
+#chart {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
