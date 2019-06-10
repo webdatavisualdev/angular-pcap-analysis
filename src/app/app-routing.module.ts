@@ -14,6 +14,10 @@ const routes: Routes = [
     component: PacketChartComponent
   },
   {
+    path: 'chart/:fileId',
+    component: PacketChartComponent
+  },
+  {
     path: ':fileId/:id',
     component: PacketDetailComponent
   }

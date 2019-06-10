@@ -30,4 +30,8 @@ export class ApiService {
   getPacketDetail(fileId, id) {
     return this.http.get(`${API}/${fileId}/packet/${id}`);
   }
+
+  getCalls(id) {
+    return this.http.get(`${API}/${id}/calls`);
+  }
 }

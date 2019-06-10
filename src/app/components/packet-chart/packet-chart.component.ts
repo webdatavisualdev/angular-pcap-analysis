@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -27,21 +27,51 @@ export class PacketChartComponent implements AfterViewInit {
 
   form: FormGroup;
   fileId = '';
+  calls: any = [];
 
   constructor(
     private router: Router,
     private api: ApiService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private route: ActivatedRoute) {
     this.form = fb.group({
       title: ['', Validators.required],
       pcap: [null, Validators.required]
     });
+    this.route.params.subscribe(res => {
+      this.fileId = res.fileId;
+    });
   }
 
   async ngAfterViewInit() {
+    if (this.fileId) {
+      this.api.loading.next(true);
+      this.data = await this.api.getIps(this.fileId).toPromise();
+      this.ips = [];
+      this.data.forEach(d => {
+        if (d.src.ip && this.ips.indexOf(d.src.ip) < 0) {
+          this.ips.push(d.src.ip);
+        }
+        if (d.dst.ip && this.ips.indexOf(d.dst.ip) < 0) {
+          this.ips.push(d.dst.ip);
+        }
+      });
+      this.initSvg();
+      this.drawIps();
+      this.drawChart();
+      this.calls = await this.api.getCalls(this.fileId).toPromise();
+      console.log(this.calls);
+      this.api.loading.next(false);
+    }
+  }
+
+  async submit() {
+    if (this.form.invalid) {
+      return;
+    }
     this.api.loading.next(true);
-    this.fileId = '0da4d256874323881b7ee3a5b0f59b60';
-    this.data = await this.api.getIps('0da4d256874323881b7ee3a5b0f59b60').toPromise();
+    this.fileId = (await this.api.post(this.form.value).toPromise())['fileId'];
+    this.data = await this.api.getIps(this.fileId).toPromise();
     this.ips = [];
     this.data.forEach(d => {
       if (d.src.ip && this.ips.indexOf(d.src.ip) < 0) {
@@ -55,17 +85,8 @@ export class PacketChartComponent implements AfterViewInit {
     this.initSvg();
     this.drawIps();
     this.drawChart();
-    this.api.loading.next(false);
-  }
-
-  async submit() {
-    if (this.form.invalid) {
-      return;
-    }
-    this.api.loading.next(true);
-    this.fileId = (await this.api.post(this.form.value).toPromise())['fileId'];
-    this.data = await this.api.getIps(this.fileId).toPromise();
     this.form.patchValue({title: '', pcap: null});
+    this.calls = await this.api.getCalls(this.fileId).toPromise();
     this.api.loading.next(false);
   }
 
@@ -141,11 +162,11 @@ export class PacketChartComponent implements AfterViewInit {
           }
         })
         .attr('marker-end', 'url(#triangle)')
+        .style('cursor', 'pointer')
         .on('click', () => {
           this.router.navigate([this.fileId, d.packetId]);
         });
         this.g.append('text')
-        .attr('class', 'tooltip-text')
         .text(d.comment)
         .attr('x', () => {
           const src = this.ips.indexOf(d.src.ip) * this.width / (this.ips.length - 1);
@@ -154,6 +175,7 @@ export class PacketChartComponent implements AfterViewInit {
         })
         .attr('y', (index * this.packetH) + 5)
         .attr('stroke', '#3f51b5')
+        .style('cursor', 'pointer')
         .on('click', () => {
           this.router.navigate([this.fileId, d.packetId]);
         });

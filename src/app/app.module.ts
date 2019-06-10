@@ -10,7 +10,10 @@ import { MatButtonModule,
   MatCardModule,
   MatProgressSpinnerModule,
   MatListModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatTabsModule,
+  MatExpansionModule,
+  MatIconModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -38,7 +41,10 @@ import { PacketDetailComponent } from './components/packet-detail/packet-detail.
     MatCardModule,
     MatProgressSpinnerModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatIconModule
   ],
   providers: [
     ApiService
