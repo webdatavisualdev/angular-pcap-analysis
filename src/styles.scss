@@ -29,3 +29,24 @@
         }
     }
 }
+
+.mat-list-item {
+    height: fit-content !important;
+    padding: 5px 0 !important;
+}
+
+.mat-list-item-content {
+    height: fit-content !important;
+}
+
+.datatable-header-cell {
+    text-align: center;
+    font-weight: 700;
+}
+
+.datatable-body-cell {
+    text-align: center;
+}
+.datatable-body-cell-label {
+    word-break: break-all;
+}

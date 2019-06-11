@@ -17,6 +17,7 @@ import { MatButtonModule,
   MatTabsModule,
   MatExpansionModule,
   MatIconModule,
+  MatSlideToggleModule,
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -25,13 +26,15 @@ import { ApiService } from './services/api.service';
 import { PacketChartComponent } from './components/packet-chart/packet-chart.component';
 import { PacketDetailComponent } from './components/packet-detail/packet-detail.component';
 import { CallDetailComponent } from './components/call-detail/call-detail.component';
+import { ChartComponent } from './components/chart/chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PacketChartComponent,
     PacketDetailComponent,
-    CallDetailComponent
+    CallDetailComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import { CallDetailComponent } from './components/call-detail/call-detail.compon
     MatTabsModule,
     MatExpansionModule,
     MatIconModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    MatSlideToggleModule
   ],
   providers: [
     ApiService
