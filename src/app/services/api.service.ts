@@ -34,4 +34,9 @@ export class ApiService {
   getCalls(id) {
     return this.http.get(`${API}/${id}/calls`);
   }
+  getCallDetail(fileId, id) {
+    return this.http.get(`${API}/${fileId}/call/${id}`);
+  }
+
+
 }

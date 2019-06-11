@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PacketDetailComponent } from './components/packet-detail/packet-detail.component';
 import { PacketChartComponent } from './components/packet-chart/packet-chart.component';
+import { CallDetailComponent } from './components/call-detail/call-detail.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: ':fileId/:id',
     component: PacketDetailComponent
+  },
+  {
+    path: 'calls/:fileId/:id',
+    component: CallDetailComponent
   }
 ];
 

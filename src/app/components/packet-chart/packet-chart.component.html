@@ -28,6 +28,111 @@
                 </mat-card-content>
             </mat-card>
         </div>
+
+
     </div>
+
+
+    <mat-card class="example-card" style="margin-top: 40px">
+        <mat-card-content>
+          <div class="row">
+            <div class="col-12">
+                <ngx-datatable #table
+                 class='material' [columns]="dashColumns" [columnMode]="'force'" [scrollbarH]="true" [headerHeight]="50"
+                    [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='calls' (activate)="getCallDetails($event)">
+
+                    <ngx-datatable-column   name="{{ 'Time Start' }}" prop="timeStart" [width]="5">
+                      <ng-template   let-row="row" ngx-datatable-cell-template>
+                        {{row.timeStart | date: 'dd MMM yyyy'}}
+                      </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="{{ 'Time Stop' }}" prop="timeStop" [width]="5">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.timeStop | date: 'dd MMM yyyy'}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="{{ 'Initiator' }}" prop="initiator" [width]="65">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.initiator}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="{{ 'From' }}" prop="from" [width]="65">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.from}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="{{ 'To' }}" prop="to" [width]="40">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.to}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="{{ 'Packet Numbers' }}" prop="packetNumbers" [width]="40">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.packetNumbers}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="{{ 'Error Occurred' }}" prop="errorOccurred" [width]="40">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.errorOccurred}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="{{ 'Comment' }}" prop="comment" [width]="40">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{row.comment}}
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <!--<ngx-datatable-column name="{{ 'Edit' }}" prop="edit" [width]="40">-->
+                      <!--<ng-template let-row="row" ngx-datatable-cell-template>-->
+                        <!--<i (click)="openDashDialog(dashDialog,'edit',row)" style="cursor: pointer" class="ti-pencil text-info m-r-10"></i>-->
+                      <!--</ng-template>-->
+                    <!--</ngx-datatable-column>-->
+                    <!--<ngx-datatable-column name="{{ 'Delete' }}" prop="delete" [width]="40">-->
+                      <!--<ng-template let-row="row" ngx-datatable-cell-template>-->
+                        <!--<i (click)="openConfirmModal(confirmationdialog,'Dashboard',row)" style="cursor: pointer"   class="ti-trash text-danger m-r-10"></i>-->
+                      <!--</ng-template>-->
+                    <!--</ngx-datatable-column>-->
+                  </ngx-datatable>
+              </div>
+            </div>
+          </mat-card-content>
+    </mat-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
+
+
+
 
