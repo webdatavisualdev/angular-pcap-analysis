@@ -30,6 +30,7 @@ export class PacketChartComponent implements AfterViewInit {
   data;
   form: FormGroup;
   fileId = '';
+  file: any;
   calls: any = [];
 
   constructor(
@@ -48,10 +49,13 @@ export class PacketChartComponent implements AfterViewInit {
 
   async ngAfterViewInit() {
     if (this.fileId) {
+      if (localStorage.getItem('file')) {
+        this.file = JSON.parse(localStorage.getItem('file'));
+      }
       this.api.loading.next(true);
-      this.data = await this.api.getIps(this.fileId).toPromise();
       this.calls = await this.api.getCalls(this.fileId).toPromise();
       this.dataSource = new MatTableDataSource<PeriodicElement>(this.calls);
+      this.data = await this.api.getIps(this.fileId).toPromise();
       this.api.loading.next(false);
     }
   }
@@ -63,10 +67,12 @@ export class PacketChartComponent implements AfterViewInit {
     this.data = [];
     this.calls = [];
     this.api.loading.next(true);
-    this.fileId = (await this.api.post(this.form.value).toPromise())['fileId'];
+    this.file = await this.api.post(this.form.value).toPromise();
+    localStorage.setItem('file', JSON.stringify(this.file));
+    this.fileId = this.file.fileId;
+    this.calls = await this.api.getCalls(this.fileId).toPromise();
     this.data = await this.api.getIps(this.fileId).toPromise();
     this.form.patchValue({title: '', pcap: null});
-    this.calls = await this.api.getCalls(this.fileId).toPromise();
     this.api.loading.next(false);
   }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit, Input, OnDestroy } from '@angular/core';
 import * as d3 from 'd3';
 import { Router } from '@angular/router';
-import { type } from 'os';
 
 @Component({
   selector: 'app-chart',
@@ -66,7 +65,6 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     .attr('markerHeight', 7.5)
     .attr('orient', 'auto')
     .append('path')
-    // .attr('d', 'M 0 0 10 6 0 12 3 6')
     .attr('d', 'M 0 0 2.5 1.5 0 3 0.75 1.5')
     .style('fill', '#333');
   }
@@ -82,11 +80,9 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       .attr('stroke', '#444');
       this.g.append('g')
       .attr('transform', `translate(${index * this.width / (this.ips.length - 1) - 40}, ${-20})`)
-      // .attr('transform', `translate(${index * this.width / (this.ips.length - 1) - 30}, ${-5})`)
       .append('text')
       .text(ip)
       .style('font-size', 14);
-      // .attr('transform', 'rotate(310)');
     });
   }
 
@@ -107,7 +103,11 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
         .attr('stroke-width', 7)
         .attr('stroke', () => {
           if (this.ips.indexOf(d.dst.ip) * this.width / (this.ips.length - 1) -
-          this.ips.indexOf(d.src.ip) * this.width / (this.ips.length - 1) > 0) {
+            this.ips.indexOf(d.src.ip) * this.width / (this.ips.length - 1) > 0 ||
+            (typeof d.errorOccurred === 'boolean' && !d.errorOccurred)) {
+            if (d.type === 'request') {
+              return '#0000ff';
+            }
             return '#00ff00';
           } else {
             return '#ff0000';
@@ -116,12 +116,15 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
         .attr('marker-end', 'url(#triangle)')
         .style('cursor', 'pointer')
         .on('click', () => {
-          if (this.type === 'packet') {
-            this.router.navigate([this.fileId, d.packetId]);
-          }
+          this.router.navigate([this.fileId, d.packetId]);
         });
         this.g.append('text')
-        .text(this.type === 'packet' ? d.comment : this.type === 'call-sip' ? d.cSeq : d.commandCode)
+        .text(this.type === 'packet' ? d.comment :
+          this.type === 'call-sip' && d.type === 'request' ? d.cSeq + ' - Packet ' + d.packetId :
+          this.type === 'call-sip' && d.type === 'response' ?
+          d.response.status.code + ' ' + d.response.status.title + ' - Packet ' + d.packetId :
+          d.resultCode.code !== -1 ? d.resultCode.code + ' ' + d.resultCode.name + ' - Packet ' + d.packetId
+          : d.commandCode + ' - Packet ' + d.packetId)
         .attr('x', () => {
           const src = this.ips.indexOf(d.src.ip) * this.width / (this.ips.length - 1);
           const dst = this.ips.indexOf(d.dst.ip) * this.width / (this.ips.length - 1);
@@ -131,9 +134,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
         .attr('stroke', '#3f51b5')
         .style('cursor', 'pointer')
         .on('click', () => {
-          if (this.type === 'packet') {
-            this.router.navigate([this.fileId, d.packetId]);
-          }
+          this.router.navigate([this.fileId, d.packetId]);
         });
       }
       this.g.append('text')

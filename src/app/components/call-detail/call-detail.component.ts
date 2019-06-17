@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { ActivatedRoute } from '@angular/router';
-import { isObject } from 'util';
 
 @Component({
   selector: 'app-call-detail',
@@ -27,7 +26,6 @@ export class CallDetailComponent implements OnInit {
   async ngOnInit() {
     this.api.loading.next(true);
     this.detail = await this.api.getCallDetail(this.fileId, this.id).toPromise();
-    console.log(this.detail);
     this.api.loading.next(false);
   }
 }

@@ -17,14 +17,20 @@
 
 <mat-divider></mat-divider>
 
-<div class="p-4">
+<div class="p-4" *ngIf="!data || data.length === 0">
+    <div class="alert alert-warning">
+        Please upload a pcap file.
+    </div>
+</div>
+
+<div class="p-4" *ngIf="data && data.length > 0">
     <div class="row">
         <div class="col-12">
             <mat-card class="example-card">
-                <mat-card-title class="text-center">Packet Dialog</mat-card-title>
-                <mat-divider *ngIf="data && data.length > 0"></mat-divider>
+                <mat-card-title class="text-center">{{file && file.filename}}</mat-card-title>
+                <mat-divider></mat-divider>
                 <mat-card-content>
-                    <app-chart *ngIf="data && data.length > 0" id="chart1" [data]="data" [fileId]="fileId" type="packet"></app-chart>
+                    <app-chart id="chart1" [data]="data" [fileId]="fileId" type="packet"></app-chart>
                 </mat-card-content>
             </mat-card>
         </div>
@@ -34,7 +40,7 @@
                 <mat-divider></mat-divider>
                 <mat-card-content class="p-3">
                     <ngx-datatable #table
-                        class='material' [columns]="dashColumns" [columnMode]="'force'" [scrollbarH]="true" [headerHeight]="50"
+                        class='material' [columnMode]="'force'" [scrollbarH]="true" [headerHeight]="50"
                         [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='calls' (activate)="getCallDetails($event)">
                         <ngx-datatable-column name="{{ 'Start' }}" prop="timeStart" width="50">
                             <ng-template   let-row="row" ngx-datatable-cell-template>
@@ -53,12 +59,12 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="{{ 'From' }}" prop="from" width="100">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                                {{row.from}}
+                                {{row.from.userPart}}
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="{{ 'To' }}" prop="to" width="100">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                                {{row.to}}
+                                {{row.to.userPart}}
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="{{ 'Packets' }}" prop="packetNumbers" width="10">
@@ -68,7 +74,7 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="{{ 'Error Occurred' }}" prop="errorOccurred" width="10">
                             <ng-template let-row="row" ngx-datatable-cell-template>
-                                {{row.errorOccurred ? 'Occurred' : ''}}
+                                {{row.errorOccurred > 0 ? 'Packet #' + row.errorOccurred : 'No'}}
                             </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="{{ 'Comment' }}" prop="comment" width="300">

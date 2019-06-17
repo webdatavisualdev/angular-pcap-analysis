@@ -12,7 +12,10 @@
         <mat-card-content>
           <mat-list>
             <mat-list-item><strong class="mr-2">Comment:</strong> {{detail.call.comment}}</mat-list-item>
-            <mat-list-item><strong class="mr-2">Error Occurred: </strong>{{detail.call.errorOccurred ? 'Occurred' : ''}}</mat-list-item>
+            <mat-list-item><strong class="mr-2">Error Occurred: </strong>
+              <a *ngIf="detail.call.errorOccurred > 0" [routerLink]="['/', fileId, detail.call.errorOccurred]">{{detail.call.errorOccurred}}</a>
+              <span *ngIf="detail.call.errorOccurred === 0">No</span>
+            </mat-list-item>
           </mat-list>
         </mat-card-content>
       </mat-card>
@@ -24,8 +27,8 @@
         <mat-divider></mat-divider>
         <mat-card-content>
           <mat-list>
-            <mat-list-item><strong class="mr-2">From:</strong><span [style.word-break]="'break-all'">{{detail.call.from}}</span></mat-list-item>
-            <mat-list-item><strong class="mr-2">To:</strong><span [style.word-break]="'break-all'">{{detail.call.to}}</span></mat-list-item>
+            <mat-list-item><strong class="mr-2">From:</strong><span [style.word-break]="'break-all'">{{detail.call.from.userPart}}</span></mat-list-item>
+            <mat-list-item><strong class="mr-2">To:</strong><span [style.word-break]="'break-all'">{{detail.call.to.userPart}}</span></mat-list-item>
           </mat-list>
         </mat-card-content>
       </mat-card>
@@ -65,12 +68,12 @@
       <mat-card-content>
         <div class="py-4">
           <h5 class="text-center">SIPS</h5>
-          <app-chart id="call-sip-chart" [data]="detail.sips" type="call-sip"></app-chart>
+          <app-chart id="call-sip-chart" [fileId]="fileId" [data]="detail.sips" type="call-sip"></app-chart>
         </div>
         <mat-divider *ngIf="showDiameter"></mat-divider>
         <div *ngIf="showDiameter" class="py-4">
           <h5 class="text-center">DIAMETERS</h5>
-          <app-chart id="call-diameter-chart" [data]="detail.diameters" type="call-diameter"></app-chart>
+          <app-chart id="call-diameter-chart" [fileId]="fileId" [data]="detail.diameters" type="call-diameter"></app-chart>
         </div>
       </mat-card-content>
     </mat-card>
