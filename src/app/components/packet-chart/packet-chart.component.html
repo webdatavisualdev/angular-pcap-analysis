@@ -97,7 +97,10 @@
         <mat-card-content>
             <ul class="mt-4">
                 <li><strong>Packets:</strong> {{calls?.diametersSummary?.packetNumbers}}</li>
-                <li><strong>Error Occurred:</strong><a class="ml-1" [routerLink]="['/', fileId, calls?.diametersSummary?.errorOccurred]">{{calls?.diametersSummary?.errorOccurred}}</a></li>
+                <li><strong>Error Occurred:</strong>
+                    <a class="ml-1" *ngIf="calls?.diametersSummary?.errorOccurred !== 0" [routerLink]="['/', fileId, calls?.diametersSummary?.errorOccurred]">{{calls?.diametersSummary?.errorOccurred}}</a>
+                    <span class="ml-1" *ngIf="calls?.diametersSummary?.errorOccurred === 0">No</span>
+                </li>
                 <li><strong>Comment:</strong> {{calls?.diametersSummary?.comment}}</li>
             </ul>
         </mat-card-content>
