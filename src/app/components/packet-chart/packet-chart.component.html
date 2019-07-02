@@ -34,14 +34,15 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="col-12 mt-4">
+
+        <div class="col-12 mt-4" *ngIf="calls?.callsSummary">
             <mat-card class="example-card">
                 <mat-card-title class="text-center">Calls</mat-card-title>
                 <mat-divider></mat-divider>
                 <mat-card-content class="p-3">
                     <ngx-datatable #table
                         class='material' [columnMode]="'force'" [scrollbarH]="true" [headerHeight]="50"
-                        [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='calls' (activate)="getCallDetails($event)">
+                        [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='calls?.callsSummary' (activate)="getCallDetails($event)">
                         <ngx-datatable-column name="{{ 'Start' }}" prop="timeStart" width="50">
                             <ng-template   let-row="row" ngx-datatable-cell-template>
                                 {{row.timeStart}}
@@ -87,4 +88,18 @@
             </mat-card>
         </div>
     </div>
+</div>
+
+<div class="p-4" *ngIf="calls?.diametersSummary">
+    <mat-card>
+        <mat-card-title>Diameters Summary</mat-card-title>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <ul class="mt-4">
+                <li><strong>Packets:</strong> {{calls?.diametersSummary?.packetNumbers}}</li>
+                <li><strong>Error Occurred:</strong><a class="ml-1" [routerLink]="['/', fileId, calls?.diametersSummary?.errorOccurred]">{{calls?.diametersSummary?.errorOccurred}}</a></li>
+                <li><strong>Comment:</strong> {{calls?.diametersSummary?.comment}}</li>
+            </ul>
+        </mat-card-content>
+    </mat-card>
 </div>

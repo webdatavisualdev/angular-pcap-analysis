@@ -26,12 +26,12 @@ export interface PeriodicElement {
 
 export class PacketChartComponent implements AfterViewInit {
   displayedColumns: string[] = ['timeStart', 'timeStop', 'initiator', 'from', 'to', 'packetNumbers', 'errorOccurred', 'comment'];
-  dataSource = new MatTableDataSource<PeriodicElement>([]);
   data;
   form: FormGroup;
   fileId = '';
   file: any;
   calls: any = [];
+  diametersSummary: any;
 
   constructor(
     private router: Router,
@@ -54,7 +54,6 @@ export class PacketChartComponent implements AfterViewInit {
       }
       this.api.loading.next(true);
       this.calls = await this.api.getCalls(this.fileId).toPromise();
-      this.dataSource = new MatTableDataSource<PeriodicElement>(this.calls);
       this.data = await this.api.getIps(this.fileId).toPromise();
       this.api.loading.next(false);
     }
@@ -65,7 +64,7 @@ export class PacketChartComponent implements AfterViewInit {
       return;
     }
     this.data = [];
-    this.calls = [];
+    this.calls = {};
     this.api.loading.next(true);
     this.file = await this.api.post(this.form.value).toPromise();
     localStorage.setItem('file', JSON.stringify(this.file));
